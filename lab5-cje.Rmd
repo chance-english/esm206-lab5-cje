@@ -2,29 +2,55 @@
 title: "esm206-lab5-cje"
 author: "Chance English"
 date: "10/25/2021"
-output: html_document
+output: 
+  html_document: 
+    toc: yes
+    theme: united
+    code_folding: hide
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include = T, message = F, warning = F}
+knitr::opts_chunk$set(echo = TRUE, include = T, message = F, warning = F)
+
+library(tidyverse)
+library(effsize)
 ```
 
-## R Markdown
+## Setup & change RMarkdown settings
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Here, we'll use the "repo first" strategy to create a version-controlled R project. 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+- Make a new repo on GitHub (called esm206-lab5 or similar), with a ReadME
+- Clone to create a version-controlled R project with the same name
 
-```{r cars}
-summary(cars)
+We'll use the 'Settings > Output Settings' tool to update the YAML, changing the theme, highlighting, and adding a table of contents. 
+
+- Create a new R Markdown document, don't delete anything
+- Go to the gear icon "Settings" dropdown at the top of your .Rmd, and choose Output Options, where you can change the theme, add a table of contents, and more
+
+### Confidence intervals 
+
+To find a confidence interval with a single sample, use `t.test()` on the vector of sample values:
+ 
+ 
+```{r}
+# Create my sample (vector):
+otter_length <- c(38, 41, 50, 27, 32, 41, 48, 60, 43)
+
+# Use t.test() to return a CI (95% is default)
+otter_ci <- t.test(otter_length)
+
+### default tests that the mean otter length is 0 which is what the t.test will use to test (this is a one sample t-test)
+
+# CI: 34.69 - 49.75. If we took multiple samples from this population, and calculated a CI for each of them then we expect 95% of those samples to contain the true mean. This is a range which probably contains the true population mean
+
+# Find the sd
+otter_sd <- sd(otter_length)
 ```
 
-## Including Plots
+Mean otter length is 42.2 $\pm$ 9.3 inches (mean $\pm$ sd,n = 8) with a 95% CI of otter_ci$conf.int inches. 
 
-You can also embed plots, for example:
+#### Now, using inline referencing 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+Mean otter length `r round(otter_ci$estimate, 1)` inches 
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
